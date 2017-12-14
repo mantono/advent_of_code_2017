@@ -4,10 +4,10 @@ import java.util.*
 
 fun main(args: Array<String>)
 {
-	val inputList = CircularList(mutableListOf(0, 1, 2, 3, 4))
-	val lengthList = LinkedList(listOf(3, 4, 1, 5))
+	val inputList = CircularList((0 .. 255).toMutableList())
+	val lengthList = LinkedList(listOf(14,58,0,116,179,16,1,104,2,254,167,86,255,55,122,244))
 	val result = knotHash(inputList, lengthList)
-	println(result)
+	println(result[0] * result[1])
 }
 
 tailrec fun knotHash(
@@ -27,27 +27,6 @@ tailrec fun knotHash(
 	val nextIndex = index + lengths.pop() + skipSize
 	return knotHash(input, lengths, nextIndex, skipSize + 1)
 }
-
-private fun wrapAndSlice(input: MutableList<Int>, indices: IntRange, index: Int)
-{
-
-}
-
-private fun slice(input: MutableList<Int>, indices: IntRange, index: Int)
-{
-	val slice = input.slice(indices)
-	slice.reversed().forEachIndexed { sliceIndex, n ->
-		input[index + sliceIndex] = n
-	}
-}
-
-fun reversedIndexOf(i: Int, subListSize: Int, listSize: Int): Int
-{
-	return ((subListSize - 1) - i) % listSize
-}
-
-// 3 -> 1
-// 4 -> 0
 
 class CircularList<T>(private val list: MutableList<T> = ArrayList()): MutableList<T> by list
 {
