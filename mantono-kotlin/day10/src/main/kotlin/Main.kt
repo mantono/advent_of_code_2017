@@ -43,10 +43,5 @@ class CircularList<T>(private val list: MutableList<T> = ArrayList()): MutableLi
 		return this.joinToString(separator = ", ")
 	}
 
-	fun slice(indices: IntRange): List<T>
-	{
-		if(indices.endInclusive <= lastIndex)
-			return subList(indices.start, indices.endInclusive + 1)
-		return indices.map { this[it] }.toList()
-	}
+	fun slice(indices: IntRange): List<T> = indices.map { this[it] }
 }
