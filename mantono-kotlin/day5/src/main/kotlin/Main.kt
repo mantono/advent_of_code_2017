@@ -13,11 +13,11 @@ fun main(args: Array<String>)
 	println(computeInstructions(instructions))
 }
 
-tailrec fun computeInstructions(instructions: MutableList<Short>, index: Int = 0, jumps: Int = 0): Int
+tailrec fun computeInstructions(instructions: MutableList<Short>, index: Int = 0, steps: Int = 0): Int
 {
-	if(index < 0 || index > instructions.lastIndex) return jumps
-	val jump: Short = instructions[index]
-	val goto: Int = jump + index
+	if(index < 0 || index > instructions.lastIndex) return steps
+	val jump: Int = instructions[index].toInt()
+	val goto: Int = index + jump
 	instructions[index]++
-	return computeInstructions(instructions, goto, jumps + jump)
+	return computeInstructions(instructions, goto, steps + 1)
 }
