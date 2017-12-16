@@ -1,31 +1,52 @@
 package com.mantono.aoc
 
+import java.io.File
+import java.nio.file.Files
 import java.util.*
+
+val end: ByteArray = byteArrayOf(17, 31, 73, 47, 23)
 
 fun main(args: Array<String>)
 {
+	val file = File("input").toPath()
+	val inputAscii: ByteArray = Files.readAllBytes(File("input").toPath())
+	val completeInputAscii: CircularList<Byte> = CircularList((inputAscii + end).toMutableList())
+	completeInputAscii.forEach { println(it) }
+
+	val inputInts: List<Int> = Files.readAllLines(file)
+			.map { it.split(",") }
+			.flatMap { it }
+			.map { it.toInt() }
+
 	val inputList = CircularList((0 .. 255).toMutableList())
-	val lengthList = LinkedList(listOf(14,58,0,116,179,16,1,104,2,254,167,86,255,55,122,244))
+	val lengthList = LinkedList(inputInts)
 	val result = knotHash(inputList, lengthList)
 	println(result[0] * result[1])
+
+	knotHash(completeInputAscii, lengthList, 64)
+			.partition {  }
 }
 
-tailrec fun knotHash(
-		input: CircularList<Int>,
+tailrec fun <T> knotHash(
+		input: CircularList<T>,
 	 	lengths: Deque<Int>,
+		repeat: Int = 1,
 		index: Int = 0,
 		skipSize: Int = 0
-): List<Int>
+): List<T>
 {
 	if(lengths.isEmpty()) return input
 	val indices = index .. (index + lengths.first - 1)
-	val slice = input.slice(indices)
-	slice.reversed().forEachIndexed { sliceIndex, n ->
-		input[index + sliceIndex] = n
+	for(i in 1 .. repeat)
+	{
+		val slice = input.slice(indices)
+		slice.reversed().forEachIndexed { sliceIndex, n ->
+			input[index + sliceIndex] = n
+		}
 	}
 
 	val nextIndex = index + lengths.pop() + skipSize
-	return knotHash(input, lengths, nextIndex, skipSize + 1)
+	return knotHash(input, lengths, repeat, nextIndex, skipSize + 1)
 }
 
 class CircularList<T>(private val list: MutableList<T> = ArrayList()): MutableList<T> by list

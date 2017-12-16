@@ -1,0 +1,4 @@
+*
+!*.kt
+!.*kts
+!.gitignore
